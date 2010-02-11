@@ -3,12 +3,11 @@
 ;;; Usage:
 ;;
 ;; ;;; active-region.el
-;; (require 'active-region)
 ;; (when (require 'active-region nil t)
 ;;   (when (featurep 'anything)
 ;;     (defun active-region-anything ()
 ;;       (interactive)
-;;       (anything '(((name       . "Formatt")
+;;       (anything '(((name       . "Formatting")
 ;;                    (candidates . (indent-region align fill-region))
 ;;                    (action     . call-interactively))
 ;;                   ((name       . "Converting")
