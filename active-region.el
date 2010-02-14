@@ -102,4 +102,26 @@
     (delete-horizontal-space)
     (delete-char 1)))
 
+
+;;; utility functions
+(defun active-region-single-line-p ()
+  (when active-region-mode
+    (let ((start (point))
+          (end (mark)))
+      (when (> start end)
+        (psetf start end
+               end start))
+      (= 1 (count-lines start end))
+      )))
+
+(defun active-region-multiple-line-p ()
+  (when active-region-mode
+    (let ((start (point))
+          (end (mark)))
+      (when (> start end)
+        (psetf start end
+               end start))
+      (/= 1 (count-lines start end))
+      )))
+
 (provide 'active-region)
