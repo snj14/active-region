@@ -1,5 +1,6 @@
 ;;; active-region.el
-
+;;; last updated : 2010-02-14
+;;
 ;;; Usage:
 ;;
 ;; ;;; active-region.el
@@ -18,11 +19,7 @@
 ;;                    (action     . call-interactively))
 ;;                   )))
 ;;     (define-key active-region-mode-map (kbd "C-i") 'active-region-anything))
-;;   (define-key active-region-mode-map (kbd "\"") (active-region-surround-string "\"" "\""))
-;;   (define-key active-region-mode-map (kbd "'")  (active-region-surround-string "'" "'"))
-;;   (define-key active-region-mode-map (kbd "{")  (active-region-surround-string "{" "}"))
-;;   (define-key active-region-mode-map (kbd "(")  (active-region-surround-string "(" ")"))
-;;   (define-key active-region-mode-map (kbd "[")  (active-region-surround-string "[" "]")))
+;;   )
 
 (defgroup active-region nil
   "Active Region."
@@ -39,6 +36,12 @@
     (define-key map (kbd "C-d")   'delete-region)
     (define-key map (kbd "M-\\")  'active-region-concat-lines)
     (define-key map (kbd "M-SPC") 'active-region-concat-lines-with-space)
+    (define-key map (kbd "[")     'skeleton-pair-insert-maybe)
+    (define-key map (kbd "(")     'skeleton-pair-insert-maybe)
+    (define-key map (kbd "{")     'skeleton-pair-insert-maybe)
+    (define-key map (kbd "\"")    'skeleton-pair-insert-maybe)
+    (define-key map (kbd "'")     'skeleton-pair-insert-maybe)
+    (define-key map (kbd "`")     'skeleton-pair-insert-maybe)
     map)
   "Keymap for mark active mode.")
 
@@ -47,7 +50,13 @@
   :init-value nil
   :lighter " Region"
   :keymap active-region-mode-map
-  :group 'active-region)
+  :group 'active-region
+  (cond (active-region-mode
+         (setq skeleton-pair t)
+         )
+        ((not active-region-mode)
+         (setq skeleton-pair nil)
+         )))
 
 ;; hook
 (defun active-region-on ()
@@ -70,7 +79,7 @@
           (isearch-repeat-forward)))
     ad-do-it))
 
-;; commands
+;;; Formatting Commands
 (defun active-region-concat-lines-with-space (start end)
   (interactive "*r")
   (goto-char end)
@@ -91,18 +100,5 @@
     (move-end-of-line 1)
     (delete-horizontal-space)
     (delete-char 1)))
-
-(defun active-region-surround-string (beginning-string end-string)
-  (lexical-let ((beginning-string beginning-string)
-                (end-string end-string))
-  (lambda () "active-region-surround-string"
-    (interactive)
-    (let ((point-min (min (point) (mark)))
-          (point-max (max (point) (mark))))
-      (save-excursion
-        (goto-char point-max)
-        (insert end-string)
-        (goto-char point-min)
-        (insert beginning-string))))))
 
 (provide 'active-region)
