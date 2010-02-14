@@ -36,6 +36,7 @@
     (define-key map (kbd "C-d")   'delete-region)
     (define-key map (kbd "M-\\")  'active-region-concat-lines)
     (define-key map (kbd "M-SPC") 'active-region-concat-lines-with-space)
+    (define-key map (kbd "<")     'skeleton-pair-insert-maybe)
     (define-key map (kbd "[")     'skeleton-pair-insert-maybe)
     (define-key map (kbd "(")     'skeleton-pair-insert-maybe)
     (define-key map (kbd "{")     'skeleton-pair-insert-maybe)
