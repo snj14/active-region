@@ -82,6 +82,9 @@
          )
         ((not active-region-mode)
          (setq skeleton-pair nil)
+         (and (featurep 'iedit)
+              iedit-mode
+              (iedit-done))
          )))
 
 ;; hook
