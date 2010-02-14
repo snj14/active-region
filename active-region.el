@@ -4,22 +4,47 @@
 ;;; Usage:
 ;;
 ;; ;;; active-region.el
-;; (when (require 'active-region nil t)
-;;   (when (featurep 'anything)
-;;     (defun active-region-anything ()
-;;       (interactive)
-;;       (anything '(((name       . "Formatting")
-;;                    (candidates . (indent-region align fill-region))
-;;                    (action     . call-interactively))
-;;                   ((name       . "Converting")
-;;                    (candidates . (upcase-region downcase-region capitalize-region base64-decode-region base64-encode-region))
-;;                    (action     . call-interactively))
-;;                   ((name       . "Converting (japanese)")
-;;                    (candidates . (japanese-hankaku-region japanese-hiragana-region japanese-katakana-region japanese-zenkaku-region))
-;;                    (action     . call-interactively))
-;;                   )))
-;;     (define-key active-region-mode-map (kbd "C-i") 'active-region-anything))
+;; (when (and (require 'active-region nil t)
+;;            (featurep 'anything))
+;;   (defun active-region-anything (&optional arg)
+;;     (interactive "*P")
+;;     (cond ((consp arg) ;; C-u C-i
+;;            (anything '(((name       . "Formatting")
+;;                         (candidates . (indent-region
+;;                                        align
+;;                                        fill-region))
+;;                         (action     . call-interactively))
+;;                        ((name       . "Converting")
+;;                         (candidates . (upcase-region
+;;                                        downcase-region
+;;                                        capitalize-region
+;;                                        base64-decode-region
+;;                                        base64-encode-region
+;;                                        tabify
+;;                                        untabify))
+;;                         (action     . call-interactively))
+;;                        ((name       . "Converting (japanese)")
+;;                         (candidates . (japanese-hankaku-region
+;;                                        japanese-hiragana-region
+;;                                        japanese-katakana-region
+;;                                        japanese-zenkaku-region))
+;;                         (action     . call-interactively))
+;;                        ((name       . "Editing")
+;;                         (candidates . (string-rectangle
+;;                                        delete-rectangle
+;;                                        iedit-mode
+;;                                        ))
+;;                         (action     . call-interactively))
+;;                        )))
+;;           ((active-region-multiple-line-p)
+;;            (call-interactively 'indent-region)
+;;            (message "indent region."))
+;;           ))
+;;   (define-key active-region-mode-map (kbd "C-i") 'active-region-anything)
 ;;   )
+
+(eval-when-compile
+  (require 'cl))
 
 (defgroup active-region nil
   "Active Region."
