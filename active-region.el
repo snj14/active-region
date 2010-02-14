@@ -44,7 +44,7 @@
     (define-key map (kbd "'")     'skeleton-pair-insert-maybe)
     (define-key map (kbd "`")     'skeleton-pair-insert-maybe)
     map)
-  "Keymap for mark active mode.")
+  "Keymap for active region mode.")
 
 (define-minor-mode active-region-mode
   "Active Region minor mode."
