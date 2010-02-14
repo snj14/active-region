@@ -59,6 +59,7 @@
     (define-key map (kbd "M-w")   'kill-ring-save)
     (define-key map (kbd "C-h")   'delete-region)
     (define-key map (kbd "C-d")   'delete-region)
+    (define-key map (kbd "M-%")   'active-region-replace)
     (define-key map (kbd "M-\\")  'active-region-concat-lines)
     (define-key map (kbd "M-SPC") 'active-region-concat-lines-with-space)
     (define-key map (kbd "<")     'skeleton-pair-insert-maybe)
@@ -130,26 +131,21 @@
     (delete-horizontal-space)
     (delete-char 1)))
 
+(defun active-region-replace ()
+  "リージョンの文字列を置換"
+  (interactive)
+  (let* ((from-string (buffer-substring (region-beginning) (region-end)))
+         (to-string (query-replace-read-to from-string "Replace" nil)))
+    (deactivate-mark)
+    (perform-replace from-string to-string t nil nil nil)))
 
 ;;; utility functions
 (defun active-region-single-line-p ()
   (when active-region-mode
-    (let ((start (point))
-          (end (mark)))
-      (when (> start end)
-        (psetf start end
-               end start))
-      (= 1 (count-lines start end))
-      )))
+    (= 1 (count-lines (region-beginning) (region-end)))))
 
 (defun active-region-multiple-line-p ()
   (when active-region-mode
-    (let ((start (point))
-          (end (mark)))
-      (when (> start end)
-        (psetf start end
-               end start))
-      (/= 1 (count-lines start end))
-      )))
+    (/= 1 (count-lines (region-beginning) (region-end)))))
 
 (provide 'active-region)
